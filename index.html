@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>ESGI - Formulaire</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="bootstrap/css/bootstrap-theme.min.css">
+<link rel="stylesheet" href="datepicker/css/datepicker.css">
+<script src="js/jquery-2.1.1.min.js"></script>
+<script src="datepicker/js/bootstrap-datepicker.js"></script>
+<script src="bootstrap/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div id="content">
+<form method="post">
+	<div class="form-group">
+		<label for="titre">Titre</label>
+	    <input type="text" class="form-control" placeholder="Titre">
+	</div>
+	<div class="form-group">
+	    <label for="titre">Description</label>
+	    <textarea placeholder="Description" class="form-control"></textarea>
+	</div>
+	<div class="form-group">
+	    <label for="titre">Clôture</label>
+	    <input type="text" id="dp1" value="" class="form-control" class="span2">
+	</div>
+	<div class="form-group">
+	    <label for="titre">Questions</label>
+	   	<button type="button" class="btn btn-primary" id="newQuestion">Ajouter une question</button>
+	   	<br><br>
+	   	<div id="questions"></div>
+	</div>
+
+	<div class="form-group">
+	    <div class="col-sm-offset-11 col-sm-0">
+	      <button type="submit" class="btn btn-success">Valider</button>
+	    </div>
+	</div>
+</form>
+</div>
+<script>
+	var counter = 0;
+	
+	$( document ).ready(function() {
+		$('#dp1').datepicker(
+		{	
+			format: 'dd/mm/yyyy'
+		});
+
+		
+		$('body').on('click', '#newQuestion', function(e){
+			counter++;
+
+			var $newdiv1 = $( "<div id='question"+counter+"'>" ), 
+			inputQuestion = document.createElement( "input" ),
+			existingdiv1 = document.getElementById( "questions" );
+
+			inputQuestion.setAttribute('type', 'text');
+			inputQuestion.setAttribute('name', 'question'+counter);
+			inputQuestion.setAttribute('placeholder', 'Ma question '+counter+' ?');
+			inputQuestion.setAttribute('class', 'form-control');
+			
+			var $newdiv2 = $( "<div id='reponse"+counter+"' data-nbReponse='0'>" ),
+			boutonRep = document.createElement( "button" ),
+			existingdiv1 = document.getElementById( "question"+counter );			
+			boutonRep.setAttribute('type', 'button');
+			
+			boutonRep.setAttribute('class', 'newReponse btn btn-info');
+			boutonRep.setAttribute('data-id', counter);
+			boutonRep.innerHTML  = 'Ajouter une réponse';
+
+			$newdiv2.html(boutonRep);
+
+			$newdiv1.html(inputQuestion);
+			$newdiv1.append($newdiv2);
+
+			$( "#questions" ).append( "<br>", $newdiv1 );
+
+			var myselect = $('<select/>', {
+				name: "choix-question",
+				class: "form-control"
+				
+				
+			}).prependTo($newdiv2);
+			
+			$('<option/>', {
+				value: "Choix unique",
+				text: "Choix unique",
+				
+			}).appendTo(myselect);
+			$('<option/>', {
+				value: "Choix multiple",
+				text: "Choix multiple",
+				
+			}).appendTo(myselect);
+
+		});		
+
+		$('body').on('click', ".newReponse", function(e){
+			var questionId = $(this).data("id");
+
+			var nb_reponse = $(this).parent().data("nbreponse");
+			nb_reponse++;
+			$(this).parent().data("nbreponse", nb_reponse);
+			
+
+			var name = $(this).parent().parent().attr("id") + "_reponse" + parseInt(nb_reponse);
+
+			var $newdiv3 = $( "<div class='has-feedback'>" ),
+			inputReponse = document.createElement( "input" ),
+			existingdiv1 = document.getElementById( "reponse"+counter );
+
+			inputReponse.setAttribute('type', 'text');
+			inputReponse.setAttribute('name', name );
+			inputReponse.setAttribute('placeholder', 'Ma réponse');
+			inputReponse.setAttribute('class', 'form-control');
+
+			$newdiv3.html(inputReponse);
+
+
+			$('<label/>', {
+				class: "control-label",
+				
+			}).prependTo($newdiv3); 
+
+			$('<span/>', {
+				
+				class: "supprimer glyphicon glyphicon-remove form-control-feedback",
+				
+			}).appendTo($newdiv3);
+			
+			$(this).parent().append($newdiv3);
+			});
+
+		$('body').on('click', ".supprimer", function(e){
+			$(this).parent().remove("div");
+		});
+
+	});
+</script>
+</body>
+</html> 
