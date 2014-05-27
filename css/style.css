@@ -3,3 +3,10 @@
     margin-top: 5%;
     width: 50%;
 }
+.active{
+    background-color: #EEEEEE;
+    text-decoration: none;
+}
+.login{
+	width: 55% !important;
+}

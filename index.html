@@ -12,133 +12,55 @@
 <script src="bootstrap/js/bootstrap.min.js"></script>
 </head>
 <body>
-<div id="content">
-<form method="post">
-	<div class="form-group">
-		<label for="titre">Titre</label>
-	    <input type="text" class="form-control" placeholder="Titre">
+<div class="container-fluid">
+	<div class="navbar-header">
+	  <a href="#" class="navbar-brand">Projet .NET | ESGI Questionnaire</a>
 	</div>
-	<div class="form-group">
-	    <label for="titre">Description</label>
-	    <textarea placeholder="Description" class="form-control"></textarea>
+	<div id="bs-example-navbar-collapse-8" class="collapse navbar-collapse">
+	  <ul class="nav navbar-nav">
+	    <li class="active"><a href="#">Accueil</a></li>
+	  </ul>
+	  <ul class="nav navbar-nav navbar-right">
+	  	<li><a href="register.html">S'inscrire <span class="glyphicon glyphicon-user"></span></a></li>
+        <li><a href="login.html">Connexion <span class="glyphicon glyphicon-lock"></span> </a></li>
+      </ul>
 	</div>
-	<div class="form-group">
-	    <label for="titre">Clôture</label>
-	    <input type="text" id="dp1" value="" class="form-control" class="span2">
-	</div>
-	<div class="form-group">
-	    <label for="titre">Questions</label>
-	   	<button type="button" class="btn btn-primary" id="newQuestion">Ajouter une question</button>
-	   	<br><br>
-	   	<div id="questions"></div>
-	</div>
-
-	<div class="form-group">
-	    <div class="col-sm-offset-11 col-sm-0">
-	      <button type="submit" class="btn btn-success">Valider</button>
-	    </div>
-	</div>
-</form>
 </div>
-<script>
-	var counter = 0;
-	
-	$( document ).ready(function() {
-		$('#dp1').datepicker(
-		{	
-			format: 'dd/mm/yyyy'
-		});
+<div id="content">
+<h2>Présentation du projet .NET</h2>
+<p>
+1 - Introduction :
+<br><br>
+Le but de ce projet est de créé une solution de création de formulaire en ligne. Ce système proposera au minimum les fonctionnalités suivantes :<br>
+-	La gestion des formulaires <br>
+-	La visualisation des statistiques<br>
+-	La soumission de réponse à un formulaire<br><br>
+2 - Livrables :<br><br>
 
-		
-		$('body').on('click', '#newQuestion', function(e){
-			counter++;
+Les livrables suivant sont attendus à la fin du projet :<br>
+-	Projet Visual Studio<br><br>
+3 - Backoffice :<br><br>
 
-			var $newdiv1 = $( "<div id='question"+counter+"'>" ), 
-			inputQuestion = document.createElement( "input" ),
-			existingdiv1 = document.getElementById( "questions" );
+	3.1 – Création d’un formulaire<br><br>
 
-			inputQuestion.setAttribute('type', 'text');
-			inputQuestion.setAttribute('name', 'question'+counter);
-			inputQuestion.setAttribute('placeholder', 'Ma question '+counter+' ?');
-			inputQuestion.setAttribute('class', 'form-control');
-			
-			var $newdiv2 = $( "<div id='reponse"+counter+"' data-nbReponse='0'>" ),
-			boutonRep = document.createElement( "button" ),
-			existingdiv1 = document.getElementById( "question"+counter );			
-			boutonRep.setAttribute('type', 'button');
-			
-			boutonRep.setAttribute('class', 'newReponse btn btn-info');
-			boutonRep.setAttribute('data-id', counter);
-			boutonRep.innerHTML  = 'Ajouter une réponse';
+La création d’un formulaire permettre de renseigner les informations suivantes :<br>
+-	Titre<br>
+-	Description<br>
+-	Date de clôture<br>
+-	Liste de questions<br>
+Remarques : Pour chaque formulaire, un hash unique sera généré. Il permettra aux utilisateurs d’accéder au formulaire pour y répondre.<br><br>
 
-			$newdiv2.html(boutonRep);
+3.2 – Actions sur un formulaire<br><br>
 
-			$newdiv1.html(inputQuestion);
-			$newdiv1.append($newdiv2);
+Pour chaque formulaire, vous devez pouvoir :<br>
+-	Le clôturer<br>
+-	Le modifier<br>
+-	Le supprimer<br>
+-	Consulter les statistiques<br><br>
+4 - Front :<br><br>
 
-			$( "#questions" ).append( "<br>", $newdiv1 );
+Le front permettra à un utilisateur en possession d’une url d’accéder à un formulaire et d’y répondre. Si l’url ne correspond à aucun formulaire, alors une page d’erreur est affichée.<br>
+</p>
 
-			var myselect = $('<select/>', {
-				name: "choix-question",
-				class: "form-control"
-				
-				
-			}).prependTo($newdiv2);
-			
-			$('<option/>', {
-				value: "Choix unique",
-				text: "Choix unique",
-				
-			}).appendTo(myselect);
-			$('<option/>', {
-				value: "Choix multiple",
-				text: "Choix multiple",
-				
-			}).appendTo(myselect);
-
-		});		
-
-		$('body').on('click', ".newReponse", function(e){
-			var questionId = $(this).data("id");
-
-			var nb_reponse = $(this).parent().data("nbreponse");
-			nb_reponse++;
-			$(this).parent().data("nbreponse", nb_reponse);
-			
-
-			var name = $(this).parent().parent().attr("id") + "_reponse" + parseInt(nb_reponse);
-
-			var $newdiv3 = $( "<div class='has-feedback'>" ),
-			inputReponse = document.createElement( "input" ),
-			existingdiv1 = document.getElementById( "reponse"+counter );
-
-			inputReponse.setAttribute('type', 'text');
-			inputReponse.setAttribute('name', name );
-			inputReponse.setAttribute('placeholder', 'Ma réponse');
-			inputReponse.setAttribute('class', 'form-control');
-
-			$newdiv3.html(inputReponse);
-
-
-			$('<label/>', {
-				class: "control-label",
-				
-			}).prependTo($newdiv3); 
-
-			$('<span/>', {
-				
-				class: "supprimer glyphicon glyphicon-remove form-control-feedback",
-				
-			}).appendTo($newdiv3);
-			
-			$(this).parent().append($newdiv3);
-			});
-
-		$('body').on('click', ".supprimer", function(e){
-			$(this).parent().remove("div");
-		});
-
-	});
-</script>
 </body>
 </html> 

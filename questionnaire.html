@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>ESGI - Formulaire</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+<link rel="stylesheet" href="bootstrap/css/bootstrap-theme.min.css">
+<link rel="stylesheet" href="datepicker/css/datepicker.css">
+<script src="js/jquery-2.1.1.min.js"></script>
+<script src="datepicker/js/bootstrap-datepicker.js"></script>
+<script src="bootstrap/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container-fluid">
+	<div class="navbar-header">
+	  <a href="#" class="navbar-brand">Projet .NET | ESGI Questionnaire</a>
+	</div>
+	<div id="bs-example-navbar-collapse-8" class="collapse navbar-collapse">
+	  <ul class="nav navbar-nav">
+	    <li><a href="index.html">Accueil</a></li>
+	    <li class="active"><a href="questionnaire.html">Questionnaire <span class="glyphicon glyphicon-plus"></span></a></li>
+	  </ul>
+	  <ul class="nav navbar-nav navbar-right">
+	  	<li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">Mon compte <span class="glyphicon glyphicon-user"></span> <b class="caret"></b></a>
+          <ul class="dropdown-menu">
+            <li><a href="myquestionnaire.html">Mes Questionnaires</a></li>
+            <li><a href="statistic.html">Les Statistiques</a></li>
+            <li><a href="profile.html">Mon profil</a></li>
+            <li class="divider"></li>
+        	<li><a href="#">Déconnexion <span class="glyphicon glyphicon-off"></span></a></li>
+      	</ul>
+      </ul>
+	</div>
+</div>
+<div id="content">
+<h2>Création d'un Questionnaire</h2>
+<form method="post">
+	<div class="form-group">
+		<label for="titre">Titre</label>
+	    <input type="text" class="form-control" placeholder="Titre">
+	</div>
+	<div class="form-group">
+	    <label for="titre">Description</label>
+	    <textarea placeholder="Description" class="form-control"></textarea>
+	</div>
+	<div class="form-group">
+	    <label for="titre">Clôture</label>
+	    <input type="text" id="dp1" value="" class="form-control" class="span2">
+	</div>
+	<div class="form-group">
+	    <label for="titre">Questions</label>
+	   	<button type="button" class="btn btn-primary" id="newQuestion">Ajouter une question</button>
+	   	<br><br>
+	   	<div id="questions"></div>
+	</div>
+
+	<div class="form-group">
+	    <div class="col-sm-offset-11 col-sm-0">
+	      <button type="submit" class="btn btn-success">Valider</button>
+	    </div>
+	</div>
+</form>
+</div>
+<script>
+	var counter = 0;
+	$( document ).ready(function() {
+
+		$('#dp1').datepicker(
+		{	
+			format: 'dd/mm/yyyy'
+		});
+
+		$('body').on('click', '#newQuestion', function(e){
+			counter++;
+
+			var newdiv1 = $( "<div id='question"+counter+"'>" ), 
+			existingdiv1 = $("#questions");
+
+
+			var newdiv2 = $( "<div id='reponse"+counter+"' data-nbReponse='0'>" ),
+			existingdiv2 = $("#question"+counter);
+
+			newdiv2.html('<button type="button" class="newReponse btn btn-info" data-id="'+counter+'">Ajouter une réponse</button>');
+
+			newdiv1.html('<input type="text" name="question'+counter+'" placeholder="Ma question '+counter+'" class="form-control" />');
+			newdiv1.append(newdiv2);
+
+			$( "#questions" ).append( "<br>", newdiv1 );
+
+			var myselect = $('<select/>', {
+				name: "choix-question",
+				class: "form-control"				
+			}).prependTo(newdiv2);
+			
+			$('<option/>', {
+				value: "unique",
+				text: "Choix unique",
+				
+			}).appendTo(myselect);
+
+			$('<option/>', {
+				value: "multiple",
+				text: "Choix multiple",
+			}).appendTo(myselect);
+		});
+
+		$('body').on('click', ".newReponse", function(e){
+			var questionId = $(this).data("id");
+
+			var nb_reponse = $(this).parent().data("nbreponse");
+			nb_reponse++;
+			$(this).parent().data("nbreponse", nb_reponse);
+			
+			var name = $(this).parent().parent().attr("id") + "_reponse" + parseInt(nb_reponse);
+
+			var newdiv3 = $( "<div class='has-feedback'>" ),
+			existingdiv1 = $( "reponse"+counter );
+
+			newdiv3.html('<input type="text" name="'+name+'" placeholder ="Ma réponse" class="form-control" />');
+
+			$('<label/>', {
+				class: "control-label",
+				
+			}).prependTo(newdiv3); 
+
+			$('<span/>', {
+				
+				class: "supprimer glyphicon glyphicon-remove form-control-feedback",
+				
+			}).appendTo(newdiv3);
+			
+			$(this).parent().append(newdiv3);
+			});
+
+		$('body').on('click', ".supprimer", function(e){
+			$(this).parent().remove("div");
+		});
+
+	});
+</script>
+</body>
+</html> 
